@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.w3.org/1999/xhtml" lang="fr" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annonce Manager</title>
+    <link href="/css/lib/bootstrap.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg bg-dark mb-5" data-bs-theme="dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/annonces/list}">Liste des annonces</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyAuthority('admin', 'journaliste')">
+                        <a class="nav-link" th:href="@{/annonces/ajouter}">Créer une annonce</a>
+                    </li>
+                    <li class="nav-item"  th:if="${not #authorization.expression('isAuthenticated()')}">
+                        <a class="nav-link" th:href="@{/login}">Connexion</a>
+                    </li>
+                    <li class="nav-item"  th:if="${#authorization.expression('isAuthenticated()')}">
+                        <a class="nav-link" th:href="@{/logout}">Déconnexion</a>
+                    </li>
+                    <li class="nav-item"  sec:authorize="hasAuthority('admin')">
+                        <a class="nav-link" sec:authorize="hasAuthority('admin')" th:href="@{/admin}">Espace Admin</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid">
+
+    <!-- Header Content -->
+    <div class="row">
+        <div class="col">
+            <h3 class="my-5 text-center bg-dark text-white">
+                Annonce Manager
+            </h3>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mb-5">
+        <table class="col-10">
+            <thead>
+            <tr>
+                <th class="col-2">Titre</th>
+                <th class="col-2">Catégorie</th>
+                <th class="col-3">Date de Publication</th>
+                <th class="col-3">Image</th>
+                <th class="col-2">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="annonce : ${annonces}">
+                <td class="col-2" th:text="${annonce.title}"></td>
+                <td class="col-2" th:text="${annonce.category.name}"></td>
+                <td class="col-3" th:text="${#dates.format(annonce.publicationDate, 'dd/MM/yyyy HH:mm')}"></td>
+                <td><img th:src="${annonce.image}" width="200px" alt="Image de l'annonce"></td>
+                <td class="col-2">
+                    <a th:href="@{/annonces/{id}(id=${annonce.id})}" class="btn btn-primary">Détails</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-center" sec:authorize="hasAnyAuthority('admin', 'journaliste')">
+        <a th:href="@{/annonces/ajouter}" class="btn btn-outline-primary mt-5">Ajouter une annonce</a>
+    </div>
+
+    <div class="d-flex flex-column align-items-center my-3">
+        <form action="#" method="get" class="d-flex">
+            <div class="form-group col-8">
+                <label for="categoryFilter">Filtrer les annonces par catégorie :</label>
+                <select id="categoryFilter" name="categoryFilter" class="form-control">
+                    <option value="">Toutes les catégories</option>
+                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                </select>
+            </div>
+            <div class="col-3 mx-5">
+                <button type="submit" class="btn btn-outline-warning mt-3">Filtrer</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+</body>
+
+</html>

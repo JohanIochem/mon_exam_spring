@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Espace admin</title>
+    <link href="/css/lib/bootstrap.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg bg-dark mb-5" data-bs-theme="dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/annonces/list}">Liste des annonces</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyAuthority('admin', 'journaliste')">
+                        <a class="nav-link" th:href="@{/annonces/ajouter}">Créer une annonce</a>
+                    </li>
+                    <li class="nav-item"  th:if="${not #authorization.expression('isAuthenticated()')}">
+                        <a class="nav-link" th:href="@{/login}">Connexion</a>
+                    </li>
+                    <li class="nav-item"  th:if="${#authorization.expression('isAuthenticated()')}">
+                        <a class="nav-link" th:href="@{/logout}">Déconnexion</a>
+                    </li>
+                    <li class="nav-item"  sec:authorize="hasAuthority('admin')">
+                        <a class="nav-link" sec:authorize="hasAuthority('admin')" th:href="@{/admin}">Espace Admin</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+
+<main class="min-vh-100 d-flex align-items-center justify-content-center text-bg-light">
+    <div class="container d-flex justify-content-between">
+
+        <div class="card text-dark" style="width: 45%;">
+            <div class="card-body">
+                <h5 class="card-title">Bonjour Administrateur</h5>
+
+                <p class="card-text">Découvrez les statistiques de l'utilisation de votre site. </p>
+                <a href="#" class="btn btn-dark">Voir les statistiques</a>
+            </div>
+        </div>
+
+
+        <div class="card text-dark" style="width: 45%;">
+            <div class="card-body">
+                <h5 class="card-title">Tableau de Bord</h5>
+                <p class="card-text">Visualisez les informations essentielles ici.</p>
+
+                <span class="bi bi-envelope card-icon fs-3"></span>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

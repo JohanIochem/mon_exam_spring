@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Déconnexion custom</title>
+        <link href="/css/lib/bootstrap.css" rel="stylesheet" type="text/css">
+
+    </head>
+    <body>
+
+
+        <section class="min-vh-100">
+
+            <div>
+                <h1 class="my-5 ms-3">Déconnectez vous en cliquant juste dessous 👇.</h1>
+            </div>
+
+            <form th:action="@{logout-processing}" method="post">
+                <!--mise en place du token de sécurité  (permet de vérifié que la perosnne qui soumet le formulaire (POST) et bien celle qui en a fait la demande (GET))     -->
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                <!--  Les champs du formulaire  -->
+                <button type="submit" class="btn btn-outline-success ms-5">Confirmer</button>
+
+            </form>
+
+        </section>
+    </body>
+</html>

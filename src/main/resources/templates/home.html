@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://thymeleaf.org/extras/spring-security">
+<head>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Accueil</title>
+        <link href="/css/lib/bootstrap.css" rel="stylesheet" type="text/css">
+
+    </head>
+    <body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark mb-5" data-bs-theme="dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                        aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/annonces/list}">Liste des annonces</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('admin', 'journaliste')">
+                            <a class="nav-link" th:href="@{/annonces/ajouter}">Créer une annonce</a>
+                        </li>
+                        <li class="nav-item" th:if="${not #authorization.expression('isAuthenticated()')}">
+                            <a class="nav-link" th:href="@{/login}">Connexion</a>
+                        </li>
+                        <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
+                            <a class="nav-link" th:href="@{/logout}">Déconnexion</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="hasAuthority('admin')">
+                            <a class="nav-link" sec:authorize="hasAuthority('admin')" th:href="@{/admin}">Espace
+                                Admin</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+
+
+        <div class="row">
+            <div class="col">
+                <h3 class="my-5 text-center bg-dark text-white">
+                    Mon appli d'annonce !
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <a th:href="@{/annonces/list}">
+        <button class="px-2 ms-5 btn btn-outline-primary">Direction les annonces</button>
+    </a>
+    </body>
+    </html>
